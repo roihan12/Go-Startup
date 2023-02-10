@@ -32,18 +32,11 @@ func main() {
 	userHandler := handlers.NewUserHandler(userService, authService)
 
 	campaignRepository := campaigns.NewRepository(db)
+	campaignService := campaigns.NewService(campaignRepository)
 
-	campaignAll, err := campaignRepository.FindByID(11)
+	campaigns, _ := campaignService.FindCampaigns(11)
 
-	fmt.Println(len(campaignAll))
-
-	for _, campaign := range campaignAll {
-		fmt.Println(campaign.Name)
-		if len(campaign.CampaignImage) > 0 {
-			fmt.Println("Jumlah gambar:", len(campaign.CampaignImage))
-			fmt.Println(campaign.CampaignImage[0].FileName)
-		}
-	}
+	fmt.Println(len(campaigns))
 	router := gin.Default()
 	api := router.Group("api/v1")
 
