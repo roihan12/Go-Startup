@@ -2,9 +2,11 @@ package main
 
 import (
 	"bwastartup/auth"
+	"bwastartup/campaigns"
 	"bwastartup/handlers"
 	"bwastartup/helpers"
 	"bwastartup/users"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -29,6 +31,19 @@ func main() {
 	authService := auth.NewService()
 	userHandler := handlers.NewUserHandler(userService, authService)
 
+	campaignRepository := campaigns.NewRepository(db)
+
+	campaignAll, err := campaignRepository.FindByID(11)
+
+	fmt.Println(len(campaignAll))
+
+	for _, campaign := range campaignAll {
+		fmt.Println(campaign.Name)
+		if len(campaign.CampaignImage) > 0 {
+			fmt.Println("Jumlah gambar:", len(campaign.CampaignImage))
+			fmt.Println(campaign.CampaignImage[0].FileName)
+		}
+	}
 	router := gin.Default()
 	api := router.Group("api/v1")
 
